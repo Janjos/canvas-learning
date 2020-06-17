@@ -1,5 +1,5 @@
 const GAMEWINDOW = {
-  WIDTH: 800,
+  WIDTH: 600,
   HEIGTH: 600,
 };
 
