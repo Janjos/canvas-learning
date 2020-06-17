@@ -1,7 +1,7 @@
 {
-  "name": "megaman",
+  "name": "bit",
   "version": "1.0.0",
-  "description": "A megaman game made with node.js",
+  "description": "A platform game made with node.js",
   "main": "index.js",
   "scripts": {
     "dev": "parcel index.html",
