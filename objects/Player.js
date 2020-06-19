@@ -1,24 +1,29 @@
-import { TICKS_PER_FRAME } from "../constants";
+import { TICKS_PER_FRAME, TILES_SIZE } from "../constants";
 
 function Player(ctx, sprite) {
-  this.sprtStand = {
-    width: 16,
-    height: 16,
-    frames: 3,
-  };
+  this.friction = 0.8;
+
   this.input = {
     left: false,
     right: false,
     jump: false,
   };
+
+  this.jumpingTickCount = 0;
+  this.jumpIsDone = false;
+
+  this.collides = { top: false, bottom: false, left: false, right: false };
+
   this.hasInputPressed = () => {
     const { left, right, jump } = this.input;
     return left || right || jump;
   };
+
   this.position = {
     x: 0,
-    y: 0,
+    y: 500,
   };
+
   this.tickCount_walk = 1;
   this.frameIndex_walk = 1;
 
@@ -33,25 +38,27 @@ function Player(ctx, sprite) {
   return {
     input: this.input,
     position: this.position,
-    sprtStand: this.sprtStand,
     sprtScale: this.sprtScale,
     hasInputPressed: this.hasInputPressed,
+    jumpingTickCount: this.jumpingTickCount,
+    isJumping: this.jumpingTickCount > 0,
     drawPlayerStand: () => {
       this.resetTickCount();
       ctx.drawImage(
         sprite,
         0,
-        193,
-        this.sprtStand.width,
-        this.sprtStand.height,
+        0,
+        TILES_SIZE,
+        TILES_SIZE,
         this.position.x,
         this.position.y,
-        this.sprtStand.width * this.sprtScale,
-        this.sprtStand.height * this.sprtScale
+        TILES_SIZE * this.sprtScale,
+        TILES_SIZE * this.sprtScale
       );
     },
     drawPlayerWalk: () => {
       this.tickCount_walk++;
+      const leftSide = this.input.left;
       if (this.tickCount_walk > TICKS_PER_FRAME) {
         this.tickCount_walk = 0;
         this.frameIndex_walk++;
@@ -59,14 +66,28 @@ function Player(ctx, sprite) {
       }
       ctx.drawImage(
         sprite,
-        this.sprtStand.width * this.frameIndex_walk,
-        193,
-        this.sprtStand.width,
-        this.sprtStand.height,
+        TILES_SIZE * this.frameIndex_walk,
+        leftSide ? 16 : 0,
+        TILES_SIZE,
+        TILES_SIZE,
         this.position.x,
         this.position.y,
-        this.sprtStand.width * this.sprtScale,
-        this.sprtStand.height * this.sprtScale
+        TILES_SIZE * this.sprtScale,
+        TILES_SIZE * this.sprtScale
+      );
+      this.tickCount++;
+    },
+    drawPlayerJump: () => {
+      ctx.drawImage(
+        sprite,
+        TILES_SIZE * this.frameIndex_walk,
+        leftSide ? 16 : 0,
+        TILES_SIZE,
+        TILES_SIZE,
+        this.position.x,
+        this.position.y,
+        TILES_SIZE * this.sprtScale,
+        TILES_SIZE * this.sprtScale
       );
       this.tickCount++;
     },

@@ -1,4 +1,3 @@
-import { KEY } from "../constants";
 import { Player } from "../objects/Player";
 import { loadAssets } from "./graphics/loadSprites";
 import { render } from "./gameLoop/render";
@@ -27,7 +26,7 @@ const initGameEnviroment = () => {
     }
 
     function gameLoop() {
-      render(player, canvas, ctx);
+      render(player, canvas, ctx, sprite);
       requestAnimationFrame(gameLoop);
     }
   }
